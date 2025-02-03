@@ -1,0 +1,36 @@
+@font-face {
+    font-family: 'terminalFont';
+    src: url('fsex300-webfont.ttf') format('truetype');
+}
+
+body {
+    font-size: 30px;
+    font-family: 'terminalFont', serif;
+    color: #39f89c;
+    background-image: url('bg.png');
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
+    background-color: black;
+  }
+  
+  #output {
+    margin-bottom: 20px;
+  }
+  
+  #input-line {
+    display: flex;
+  }
+  
+  #prompt {
+    margin-right: 5px;
+  }
+  
+  #input {
+    font-size: 30px;
+    font-family: 'terminalFont', serif;
+    color: #39f89c;
+    background: none;
+    border: none;
+    outline: none;
+    flex-grow: 1;
+  }
