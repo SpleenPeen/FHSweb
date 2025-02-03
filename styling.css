@@ -16,6 +16,14 @@ body {
   #output {
     margin-bottom: 20px;
   }
+
+  #preOut {
+    margin-bottom: 20px;
+  }
+
+  #error {
+    color: #ff3333;
+  }
   
   #input-line {
     display: flex;
