@@ -29,6 +29,7 @@ const screen = {
         PrintMessage('This is a hack solver for the terminals in Fallout. <br><br>To enter a word simply write down the word and press enter, to clear all previous words type /c and to confirm your word selection press enter with a blank field.');
         break;
       case 1:
+        PrintValidGuesses();
         break;
     }
   }
@@ -38,6 +39,7 @@ screen.setScreen(0);
 
 //variables 
 const words = [];
+const validWords = [];
 
 // Handle user input
 input.addEventListener('keydown', (e) => {
@@ -114,9 +116,112 @@ function InputWords(command)
   PrintMessage(word);
 }
 
+const guesses = {
+  index: [],
+  correct: []
+};
+
+function PrintValidGuesses()
+{
+  output.innerHTML = '';
+  preOut.innerHTML = '';
+  validWords.length = 0;
+  PrintMessage('Here are some valid guesses:');
+  for (let i = 0; i < words.length; i++)
+  {
+    let valid = true;
+    for (let j = 0; j < guesses.index.length; j++)
+    {
+      let matching = 0;
+      for (let k = 0; k < words[0].length; k++)
+      {
+        if (words[i].charAt(k) == words[j].charAt(k))
+        {
+          matching++;
+          if (matching > guesses.correct[j])
+          {
+            valid = false;
+            break;
+          }
+        }
+      }
+      if (matching != guesses.correct[j])
+      {
+        valid = false;
+        break;
+      }
+    }
+    if (valid)
+    {
+      validWords.push(i);
+      PrintMessage(`${i}: ${words[i]}`);
+    }
+  }
+  PrintMessage('<br>Type in the index of your guess.');
+}
+
 function InputGuesses(command)
 {
+  //convert input to a number
+  let num = PrepareNumber(command);
 
+  //get correct letters
+  if (guesses.index.length > guesses.correct.length)
+  {
+    if (isNaN(num))
+    {
+      PrintErrorMsg('Not a number');
+      return;
+    }
+
+    if (num > words[0].length)
+    {
+      PrintErrorMsg('Number is too big');
+    }
+
+    guesses.correct.push(num);
+    PrintValidGuesses();
+
+    return;
+  }
+
+  //get guess index
+  if (isNaN(num))
+  {
+    let word = PrepareWord(command);
+    for (let i = 0; i < validWords.length; i++)
+    {
+      if (word == words[validWords[i]])
+      {
+        num = validWords[i];
+      }
+    }
+    if (isNaN(num))
+    {
+      PrintErrorMsg('Not a number');
+      return;
+    }
+  }
+
+  let validInd = false;
+  for (let i = 0; i < validWords.length; i++)
+  {
+    if (validWords[i] == num)
+    {
+      validInd = true;
+      break;
+    }
+  }
+
+  if (!validInd)
+  {
+    PrintErrorMsg('Not a valid index');
+    return;
+  }
+
+  guesses.index.push(num);
+  PrintMessage(num);
+  PrintMessage('<br>Type in the correct amount of letters.');
 }
 
 function PrepareWord(inpt)
@@ -127,12 +232,27 @@ function PrepareWord(inpt)
   for(let i = 0; i < str.length; i++)
   {
     let curChar = str.charAt(i);
-    if(/^[A-Za-z]+$/.test(curChar))
+    if(/^[A-Z]+$/.test(curChar))
     {
       word += curChar;
     }
   }
   return word;
+}
+
+function PrepareNumber(inpt)
+{
+  let str = String(inpt);
+  let word = '';
+  for(let i = 0; i < str.length; i++)
+  {
+    let curChar = str.charAt(i);
+    if(/^[0-9]+$/.test(curChar))
+    {
+      word += curChar;
+    }
+  }
+  return parseInt(word);
 }
 
 function PrintErrorMsg(msg){
