@@ -43,6 +43,15 @@ const validWords = [];
 
 // Handle user input
 input.addEventListener('keydown', (e) => {
+  try
+  {
+    let audio = new Audio('Sounds/ClickyClacky/clacky ' + Math.round(Math.random() * 9) + '.wav');
+    audio.play();
+  }
+  catch (ex)
+  {
+    PrintErrorMsg(ex);
+  }
   if (e.key == 'Enter') {
     const command = input.value.trim();
     input.value = ''; // Clear the input field

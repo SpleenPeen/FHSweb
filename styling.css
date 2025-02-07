@@ -12,6 +12,13 @@ body {
     background-repeat: no-repeat;
     background-color: black;
   }
+
+  .scrollBox
+  {
+    width: 90vw;
+    height: 90vh;
+    overflow: hidden;
+  }
   
   #output {
     margin-bottom: 20px;
