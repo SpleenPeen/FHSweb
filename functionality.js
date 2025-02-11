@@ -12,7 +12,7 @@ input.addEventListener('blur', () => {
 });
 
 //screen object
-const screen = {
+screen = {
   curScrn: 0,
   setScreen: function(scrn)
   {
@@ -26,7 +26,7 @@ const screen = {
     switch (this.curScrn)
     {
       case 0:
-        PrintMessage('This is a hack solver for the terminals in Fallout. <br><br>To enter a word simply write down the word and press enter, to clear all previous words type /c and to confirm your word selection press enter with a blank field.');
+        PrintMessage('Fallout Hack Solver<br><br>Commands:<br>/v number (changes the sfx volume to the provided percentage)<br>/c (clears all words)<br><br>Type in a word and press enter to add it to the selection.<br>When you have added all the words enter a blank field to move on.<br><br>');
         break;
       case 1:
         PrintValidGuesses();
@@ -38,33 +38,72 @@ const screen = {
 screen.setScreen(0);
 
 //variables 
-const words = [];
-const validWords = [];
+words = [];
+validWords = [];
+canPlay = true;
+volume = 0.5;
+
+function ChangeVolume(command)
+{
+  let strng = String(command);
+  let splitStrng = strng.split(" ");
+
+  if(splitStrng[0] != "/v")
+  {
+    return false;
+  }
+
+  try
+  {
+    let num = parseInt(splitStrng[1]);
+    volume = num/100;
+    PrintPreMsg("Volume changed to " + volume);
+  }
+  catch
+  {
+    PrintErrorMsg("Not a valid number.");
+  }
+  return true;
+}
 
 // Handle user input
 input.addEventListener('keydown', (e) => {
-  try
+  if (canPlay)
   {
+    canPlay = false;
     let audio = new Audio('Sounds/ClickyClacky/clacky ' + Math.round(Math.random() * 9) + '.wav');
+    audio.volume = volume;
     audio.play();
+    setTimeout(function(){canPlay = true}, 10);
   }
-  catch (ex)
-  {
-    PrintErrorMsg(ex);
-  }
+
   if (e.key == 'Enter') {
     const command = input.value.trim();
     input.value = ''; // Clear the input field
     preOut.innerHTML = '' //clear pre message;
 
-    switch (screen.curScrn)
+    let strng = String(command);
+
+    if (strng.charAt(0) == "/")
     {
-      case 0:
-        InputWords(command);
-        break;
-      case 1:
-        InputGuesses(command);
-        break;
+      let validCommand = false;
+      if (ChangeVolume(command))
+        validCommand = true;
+
+      if (!validCommand)
+        PrintErrorMsg("Unknown command.");
+    }
+    else
+    {
+      switch (screen.curScrn)
+      {
+        case 0:
+          InputWords(command);
+          break;
+        case 1:
+          InputGuesses(command);
+          break;
+      }
     }
 
     // Scroll to the bottom of the terminal
@@ -125,7 +164,7 @@ function InputWords(command)
   PrintMessage(word);
 }
 
-const guesses = {
+guesses = {
   index: [],
   correct: []
 };
