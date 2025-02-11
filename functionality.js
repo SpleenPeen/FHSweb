@@ -57,7 +57,7 @@ function ChangeVolume(command)
   {
     let num = parseInt(splitStrng[1]);
     volume = num/100;
-    PrintPreMsg("Volume changed to " + volume);
+    PrintPreMsg("Volume changed to " + volume*100 + "%");
   }
   catch
   {
