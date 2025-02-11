@@ -180,7 +180,7 @@ function PrintValidGuesses()
       let matching = 0;
       for (let k = 0; k < words[0].length; k++)
       {
-        if (words[i].charAt(k) == words[j].charAt(k))
+        if (words[i].charAt(k) == words[guesses.index[j]].charAt(k))
         {
           matching++;
           if (matching > guesses.correct[j])
