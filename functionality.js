@@ -84,16 +84,13 @@ input.addEventListener('keydown', (e) => {
 
     let strng = String(command);
 
+    let validCommand = false;
     if (strng.charAt(0) == "/")
     {
-      let validCommand = false;
       if (ChangeVolume(command))
         validCommand = true;
-
-      if (!validCommand)
-        PrintErrorMsg("Unknown command.");
     }
-    else
+    if (!validCommand)
     {
       switch (screen.curScrn)
       {
